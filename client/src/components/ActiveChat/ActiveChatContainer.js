@@ -2,7 +2,6 @@ import ActiveChat from "./ActiveChat"
 import { connect } from "react-redux";
 
 const ActiveChatContainer = (props) => {
-    console.log("active chat changed");
     const {user} = props;
     const conversation = props.conversations &&
     props.conversations.find(
