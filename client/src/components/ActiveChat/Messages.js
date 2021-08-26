@@ -5,6 +5,7 @@ import moment from "moment";
 
 const Messages = (props) => {
   const { messages, otherUser, userId } = props;
+  messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 
   return (
     <Box>
