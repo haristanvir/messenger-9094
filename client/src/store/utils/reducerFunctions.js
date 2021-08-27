@@ -27,7 +27,7 @@ export const updateMessageReadInStore = (state, senderId, conversationId) => {
   const messages = conversation.messages.map((message) => {
     if (message.read === false && message.senderId !== senderId) {
       message.read = true;
-      return message;
+      return {...message};
     } else {
       return message;
     }
@@ -36,7 +36,7 @@ export const updateMessageReadInStore = (state, senderId, conversationId) => {
   return state.map((conversation)=>{
     if (conversation.id == conversationId){
       conversation.messages = messages;
-      return conversation
+      return {...conversation}
     } else {
       return conversation
     }
@@ -48,7 +48,7 @@ export const markStoreMessagesRead = (state, conversationId) => {
   const messages = conversation.messages.map((message) => {
     if (message.read === false) {
       message.read = true;
-      return message;
+      return {...message};
     } else {
       return message;
     }
@@ -57,7 +57,7 @@ export const markStoreMessagesRead = (state, conversationId) => {
   return state.map((conversation)=>{
     if (conversation.id == conversationId){
       conversation.messages = messages;
-      return conversation
+      return {...conversation}
     } else {
       return conversation
     }
