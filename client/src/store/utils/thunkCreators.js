@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  markMessagesRead,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -91,6 +92,13 @@ const sendMessage = (data, body) => {
   });
 };
 
+const sendReadUpdate = (senderId, conversationId) => {
+  socket.emit("message-read", {
+    senderId,
+    conversationId,
+  });
+};
+
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
@@ -108,6 +116,25 @@ export const postMessage = (body) => async (dispatch) => {
     console.error(error);
   }
 };
+
+const updateReadStatus = async (unreadMessages) => {
+  const statusPromises = unreadMessages.map(messageId=>{
+      return axios.put(`/api/messages/${messageId}`, {read: true});
+  });
+  await Promise.all(statusPromises);
+};
+
+export const updateReadMessages = (conversation, userId) => async (dispatch) => {
+  const unreadMessages = conversation.messages.filter(message=>{
+    if (!message.read && message.senderId === conversation.otherUser.id)
+        return message.id
+  }).map(message=>message.id);
+  if (unreadMessages.length>0){
+    await updateReadStatus(unreadMessages);
+    dispatch(markMessagesRead(conversation.id));
+    sendReadUpdate(userId, conversation.id)
+  }
+}
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {

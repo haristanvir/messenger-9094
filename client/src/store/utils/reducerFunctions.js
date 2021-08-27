@@ -22,6 +22,48 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
+export const updateMessageReadInStore = (state, senderId, conversationId) => {
+  const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
+  const messages = conversation.messages.map((message) => {
+    if (message.read === false && message.senderId !== senderId) {
+      message.read = true;
+      return message;
+    } else {
+      return message;
+    }
+  });
+
+  return state.map((conversation)=>{
+    if (conversation.id == conversationId){
+      conversation.messages = messages;
+      return conversation
+    } else {
+      return conversation
+    }
+    })
+}
+
+export const markStoreMessagesRead = (state, conversationId) => {
+  const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
+  const messages = conversation.messages.map((message) => {
+    if (message.read === false) {
+      message.read = true;
+      return message;
+    } else {
+      return message;
+    }
+  });
+
+  return state.map((conversation)=>{
+    if (conversation.id == conversationId){
+      conversation.messages = messages;
+      return conversation
+    } else {
+      return conversation
+    }
+    })
+};
+
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {

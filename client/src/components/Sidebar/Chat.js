@@ -21,22 +21,22 @@ const useStyles = makeStyles((theme) => ({
 
 const Chat = (props) => {
   const classes = useStyles();
-  const { conversation } = props;
+  const { conversation, updateReadMessages, userId } = props;
   const { otherUser } = conversation;
 
-  const handleClick = async (conversation) => {
+  const handleClick = async (conversation, userId) => {
     await props.setActiveChat(conversation.otherUser.username);
   };
 
   return (
-    <Box onClick={() => handleClick(conversation)} className={classes.root}>
+    <Box onClick={() => handleClick(conversation, userId)} className={classes.root}>
       <BadgeAvatar
         photoUrl={otherUser.photoUrl}
         username={otherUser.username}
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={conversation} />
+      <ChatContent conversation={conversation} userId={userId}/>
     </Box>
   );
 };
