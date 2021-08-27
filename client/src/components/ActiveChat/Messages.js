@@ -17,7 +17,6 @@ const findLastReadMessageId = (messages, userId) => {
 const Messages = (props) => {
   const { otherUser, userId, conversation } = props;
   const { messages } = conversation;
-  messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 
   return (
     <Box>
