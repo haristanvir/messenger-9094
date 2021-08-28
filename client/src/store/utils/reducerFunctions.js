@@ -23,46 +23,46 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
-export const updateMessageReadInStore = (state, senderId, conversationId) => {
-  const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
-  const messages = conversation.messages.map((message) => {
-    if (message.read === false && message.senderId !== senderId) {
-      message.read = true;
-      return {...message};
-    } else {
-      return message;
-    }
-  });
-
+const getNewStateWithUpdatedMessages = (state, messages, conversationId) => {
   return state.map((conversation)=>{
     if (conversation.id == conversationId){
-      conversation.messages = messages;
-      return {...conversation}
+      const newConvo = {...conversation}
+      newConvo.messages = messages;
+      return newConvo;
     } else {
       return conversation
     }
     })
 }
 
-export const markStoreMessagesRead = (state, conversationId) => {
+export const updateMessageReadInStore = (state, senderId, conversationId) => {
   const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
   const messages = conversation.messages.map((message) => {
-    if (message.read === false) {
-      message.read = true;
-      return {...message};
+    if (message.read === false && message.senderId !== senderId) {
+      const messageCopy = {...message}
+      messageCopy.read = true;
+      return messageCopy;
     } else {
       return message;
     }
   });
 
-  return state.map((conversation)=>{
-    if (conversation.id == conversationId){
-      conversation.messages = messages;
-      return {...conversation}
+  return getNewStateWithUpdatedMessages(state, messages, conversationId);
+}
+
+export const markStoreMessagesRead = (state, conversationId) => {
+  const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
+  const messages = conversation.messages.map((message) => {
+    if (message.read === false) {
+      const messageCopy = {...message}
+      messageCopy.read = true;
+      return messageCopy;
     } else {
-      return conversation
+      return message;
     }
-    })
+  });
+
+  return getNewStateWithUpdatedMessages(state, messages, conversationId);
 };
 
 export const addOnlineUserToStore = (state, id) => {
