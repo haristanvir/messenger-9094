@@ -38,7 +38,6 @@ const OtherUserBubble = (props) => {
   const { text, time, otherUser, conversation, userId} = props;
   // This is to update the read status everytime a message is received
   useEffect(() => {
-    console.log("use effect ran other user bubble");
     props.updateReadMessages(conversation, userId);
   })
   return (
