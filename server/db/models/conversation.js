@@ -7,10 +7,6 @@ const Conversation = db.define("conversation", {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  isGroup: {
-    type: Sequelize.BOOLEAN,
-    allowNull: true,
-  },
 });
 
 // find conversation given two user Ids
