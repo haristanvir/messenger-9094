@@ -47,7 +47,6 @@ router.post("/", async (req, res, next) => {
 router.put("/:messageId", async (req, res, next) => {
   const { messageId } = req.params;
   const { read } = req.body
-  //console.log(`update request message id ${messageId}`);
   try{
     const message = await Message.findByPk(messageId)
     message.read = read;
