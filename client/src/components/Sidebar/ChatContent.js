@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   unreadCounter: {
     alignItems: "flex-end",
-    padding: "10px",
+    padding: theme.spacing(10),
   },
 }));
 
