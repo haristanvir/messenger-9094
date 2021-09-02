@@ -47,8 +47,6 @@ router.post("/", async (req, res, next) => {
 // update of the message resource
 router.put("/", async (req, res, next) => {
   const { read, unreadMessages } = req.body
-  console.log("harus");
-  console.log(unreadMessages);
   try{
     const message = await Message.update(
       { read: read},
