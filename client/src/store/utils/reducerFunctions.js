@@ -23,18 +23,6 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
-const getNewStateWithUpdatedMessages = (state, messages, conversationId) => {
-  return state.map((conversation)=>{
-    if (conversation.id == conversationId){
-      const newConvo = {...conversation}
-      newConvo.messages = messages;
-      return newConvo;
-    } else {
-      return conversation
-    }
-    })
-}
-
 export const updateMessageReadInStore = (state, senderId, conversationId) => {
   const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
   const messages = conversation.messages.map((message) => {
@@ -47,7 +35,21 @@ export const updateMessageReadInStore = (state, senderId, conversationId) => {
     }
   });
 
-  return getNewStateWithUpdatedMessages(state, messages, conversationId);
+  return state.map((conversation)=>{
+    if (conversation.id == conversationId){
+      const newConvo = {...conversation}
+      newConvo.messages = messages;
+      newConvo.messages.forEach(message=>{
+        if (message.id > newConvo.lastReadMessageId && message.read === true && message.senderId !== senderId)
+          {
+            newConvo.lastReadMessageId = message.id
+          }
+      });
+      return newConvo;
+    } else {
+      return conversation
+    }
+    });
 }
 
 export const markStoreMessagesRead = (state, conversationId) => {
@@ -62,7 +64,15 @@ export const markStoreMessagesRead = (state, conversationId) => {
     }
   });
 
-  return getNewStateWithUpdatedMessages(state, messages, conversationId);
+  return state.map((conversation)=>{
+    if (conversation.id == conversationId){
+      const newConvo = {...conversation}
+      newConvo.messages = messages;
+      return newConvo;
+    } else {
+      return conversation
+    }
+    });
 };
 
 export const addOnlineUserToStore = (state, id) => {

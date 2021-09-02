@@ -68,13 +68,28 @@ export const logout = (id) => async (dispatch) => {
   }
 };
 
+const findLastReadMessageId = (messages, userId) => {
+  let lastReadMessageId = -1;
+  messages.forEach(message=>{
+    if (message.id > lastReadMessageId && message.read === true && message.senderId === userId)
+      {
+        lastReadMessageId = message.id
+      }
+  })
+  return lastReadMessageId === -1 ? undefined: lastReadMessageId;
+};
+
 // CONVERSATIONS THUNK CREATORS
 
-export const fetchConversations = () => async (dispatch) => {
+export const fetchConversations = (userId) => async (dispatch) => {
   try {
+    console.log(`bhook ${userId}`)
     const { data } = await axios.get("/api/conversations");
     data.forEach(conversation => 
-      {conversation.messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));})
+      {
+        conversation.messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+        conversation.lastReadMessageId = findLastReadMessageId (conversation.messages, userId);
+      });
     dispatch(gotConversations(data));
   } catch (error) {
     console.error(error);
