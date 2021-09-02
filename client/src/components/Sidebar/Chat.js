@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Chat = (props) => {
   const classes = useStyles();
-  const { conversation, updateReadMessages, userId } = props;
+  const { conversation, userId } = props;
   const { otherUser } = conversation;
 
   const handleClick = async (conversation) => {
