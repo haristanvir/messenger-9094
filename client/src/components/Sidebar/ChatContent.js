@@ -43,9 +43,8 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
-      {unreadMessagesCount !==0 && <Typography className={classes.unreadCounter}>
+      {unreadMessagesCount !==0 &&
           <UnreadCounter counter={unreadMessagesCount} />
-      </Typography>}
     </Box>
   );
 };
