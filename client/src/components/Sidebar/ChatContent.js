@@ -45,6 +45,7 @@ const ChatContent = (props) => {
       </Box>
       {unreadMessagesCount !==0 &&
           <UnreadCounter counter={unreadMessagesCount} />
+      }
     </Box>
   );
 };
