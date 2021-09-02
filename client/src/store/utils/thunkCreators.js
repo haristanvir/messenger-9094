@@ -83,12 +83,13 @@ const findLastReadMessageId = (messages, userId) => {
 
 export const fetchConversations = (userId) => async (dispatch) => {
   try {
-    console.log(`bhook ${userId}`)
     const { data } = await axios.get("/api/conversations");
     data.forEach(conversation => 
       {
         conversation.messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
         conversation.lastReadMessageId = findLastReadMessageId (conversation.messages, userId);
+        conversation.unreadMessagesCount = conversation.messages.filter(message => message.read === false 
+          && message.senderId === conversation.otherUser.id).length;
       });
     dispatch(gotConversations(data));
   } catch (error) {

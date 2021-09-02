@@ -45,6 +45,8 @@ export const updateMessageReadInStore = (state, senderId, conversationId) => {
             newConvo.lastReadMessageId = message.id
           }
       });
+      newConvo.unreadMessagesCount = newConvo.messages.filter(message => message.read === false 
+        && message.senderId === newConvo.otherUser.id).length;
       return newConvo;
     } else {
       return conversation
