@@ -53,7 +53,7 @@ router.put("/:messageId", async (req, res, next) => {
 } catch (error) {
   next(error);
 }
-  res.send('');
+res.sendStatus(204);
 });
 
 
