@@ -43,13 +43,19 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:messageId", async (req, res, next) => {
-  const { messageId } = req.params;
-  const { read } = req.body
+// The following route only accepts bulk 
+// update of the message resource
+router.put("/", async (req, res, next) => {
+  const { read, unreadMessages } = req.body
+  console.log("harus");
+  console.log(unreadMessages);
   try{
-    const message = await Message.findByPk(messageId)
-    message.read = read;
-    message.save();
+    const message = await Message.update(
+      { read: read},
+      { where: {
+        id: unreadMessages
+      }}
+    )
 } catch (error) {
   next(error);
 }

@@ -136,10 +136,7 @@ export const postMessage = (body) => async (dispatch) => {
 };
 
 const updateReadStatus = async (unreadMessages) => {
-  const statusPromises = unreadMessages.map(messageId=>{
-      return axios.put(`/api/messages/${messageId}`, {read: true});
-  });
-  await Promise.all(statusPromises);
+     await axios.put(`/api/messages/`, {read: true , unreadMessages});
 };
 
 export const updateReadMessages = (conversation, userId) => async (dispatch) => {
