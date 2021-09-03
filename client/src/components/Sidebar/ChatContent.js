@@ -30,9 +30,7 @@ const ChatContent = (props) => {
 
   const { conversation } = props;
   const { latestMessageText, otherUser } = conversation;
-  // finds the length of unread messages sent by the other user
-  const unreadMessagesCount = conversation.messages.filter(message => message.read === false 
-    && message.senderId === otherUser.id).length;
+  const unreadMessagesCount = conversation.unreadMessagesCount;
   return (
     <Box className={classes.root}>
       <Box>
