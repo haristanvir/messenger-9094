@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Chat = (props) => {
   const classes = useStyles();
-  const { conversation, userId } = props;
+  const { conversation } = props;
   const { otherUser } = conversation;
 
   const handleClick = async (conversation) => {
@@ -29,14 +29,14 @@ const Chat = (props) => {
   };
 
   return (
-    <Box onClick={() => handleClick(conversation, userId)} className={classes.root}>
+    <Box onClick={() => handleClick(conversation)} className={classes.root}>
       <BadgeAvatar
         photoUrl={otherUser.photoUrl}
         username={otherUser.username}
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={conversation} userId={userId}/>
+      <ChatContent conversation={conversation}/>
     </Box>
   );
 };
