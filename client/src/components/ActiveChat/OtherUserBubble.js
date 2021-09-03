@@ -39,7 +39,7 @@ const OtherUserBubble = (props) => {
   // This is to update the read status everytime a message is received
   useEffect(() => {
     props.updateReadMessages(conversation, userId);
-  })
+  },[]);
   return (
     <Box className={classes.root}>
       <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>

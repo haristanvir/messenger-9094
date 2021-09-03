@@ -4,7 +4,7 @@ import {
   addSearchedUsersToStore,
   removeOfflineUserFromStore,
   addMessageToStore,
-  markStoreMessagesRead,
+  markMessageReadInStore,
   updateMessageReadInStore,
 } from "./utils/reducerFunctions";
 
@@ -21,10 +21,11 @@ const MARK_MESSAGES_READ = "MARK_MESSAGES_READ";
 const UPDATE_MESSAGES_READ = "UPDATE_MESSAGES_READ";
 
 // ACTION CREATORS
-export const markMessagesRead = (id) => {
+export const markMessagesRead = (conversationId, senderId) => {
   return {
     type: MARK_MESSAGES_READ,
-    id
+    conversationId,
+    senderId
   }
 }
 
@@ -110,7 +111,7 @@ const reducer = (state = [], action) => {
         action.payload.newMessage
       );
     case MARK_MESSAGES_READ:
-        return markStoreMessagesRead(state, action.id)
+        return markMessageReadInStore(state, action.conversationId, action.senderId)
     case UPDATE_MESSAGES_READ:
         return updateMessageReadInStore(state, action.senderId, action.conversationId)
     default:

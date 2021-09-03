@@ -1,3 +1,8 @@
+const calculateUnreadMessageCount = (convo) => {
+  return convo.messages.filter(message => message.read === false 
+    && message.senderId === convo.otherUser.id).length;
+}
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
@@ -10,12 +15,14 @@ export const addMessageToStore = (state, payload) => {
     newConvo.latestMessageText = message.text;
     return [newConvo, ...state];
   }
+  
 
   return state.map((convo) => {
     if (convo.id === message.conversationId) {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      convoCopy.unreadMessagesCount = calculateUnreadMessageCount(convoCopy);
       return convoCopy;
     } else {
       return convo;
@@ -39,14 +46,6 @@ export const updateMessageReadInStore = (state, senderId, conversationId) => {
     if (conversation.id == conversationId){
       const newConvo = {...conversation}
       newConvo.messages = messages;
-      newConvo.messages.forEach(message=>{
-        if (message.id > newConvo.lastReadMessageId && message.read === true && message.senderId !== senderId)
-          {
-            newConvo.lastReadMessageId = message.id
-          }
-      });
-      newConvo.unreadMessagesCount = newConvo.messages.filter(message => message.read === false 
-        && message.senderId === newConvo.otherUser.id).length;
       return newConvo;
     } else {
       return conversation
@@ -54,7 +53,7 @@ export const updateMessageReadInStore = (state, senderId, conversationId) => {
     });
 }
 
-export const markStoreMessagesRead = (state, conversationId) => {
+export const markMessageReadInStore= (state, conversationId, senderId) => {
   const conversation = state.filter(conversation=> conversation.id === conversationId)[0];
   const messages = conversation.messages.map((message) => {
     if (message.read === false) {
@@ -68,8 +67,18 @@ export const markStoreMessagesRead = (state, conversationId) => {
 
   return state.map((conversation)=>{
     if (conversation.id == conversationId){
-      const newConvo = {...conversation}
+      const newConvo = {...conversation};
       newConvo.messages = messages;
+      newConvo.messages.forEach(message=>{
+        if (senderId){
+          if (message.id > newConvo.lastReadMessageId && message.read === true && message.senderId !== senderId)
+            {
+              newConvo.lastReadMessageId = message.id
+            }
+          }
+        newConvo.unreadMessagesCount = calculateUnreadMessageCount(newConvo);
+      });
+      console.log("unread count");
       return newConvo;
     } else {
       return conversation

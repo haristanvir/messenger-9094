@@ -140,14 +140,15 @@ const updateReadStatus = async (unreadMessages) => {
 };
 
 export const updateReadMessages = (conversation, userId) => async (dispatch) => {
+  console.log("this is called");
   const unreadMessages = conversation.messages.filter(message=>{
     if (!message.read && message.senderId === conversation.otherUser.id)
-        return message.id
+        return message.id;
   }).map(message=>message.id);
   if (unreadMessages.length>0){
     await updateReadStatus(unreadMessages);
-    dispatch(markMessagesRead(conversation.id));
-    sendReadUpdate(userId, conversation.id)
+    dispatch(markMessagesRead(conversation.id, undefined))
+    sendReadUpdate(userId, conversation.id);
   }
 }
 

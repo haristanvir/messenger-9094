@@ -4,7 +4,7 @@ import {
   setNewMessage,
   removeOfflineUser,
   addOnlineUser,
-  updateMessageRead,
+  markMessagesRead,
 } from "./store/conversations";
 const socket = io(window.location.origin);
 
@@ -22,7 +22,7 @@ socket.on("connect", () => {
     store.dispatch(setNewMessage(data.message, data.sender));
   });
   socket.on("message-read", ({senderId, conversationId}) => {
-    store.dispatch(updateMessageRead(senderId, conversationId));
+    store.dispatch(markMessagesRead(conversationId, senderId));
   });
 });
 
