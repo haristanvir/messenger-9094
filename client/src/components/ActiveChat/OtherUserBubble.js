@@ -35,10 +35,12 @@ const useStyles = makeStyles(() => ({
 
 const OtherUserBubble = (props) => {
   const classes = useStyles();
-  const { text, time, otherUser, conversation, userId} = props;
+  const { text, time, otherUser, conversation, userId, isMessageRead } = props;
   // This is to update the read status everytime a message is received
   useEffect(() => {
-    props.updateReadMessages(conversation, userId);
+    if (!isMessageRead){
+      props.updateReadMessages(conversation, userId);
+    }
   },[]);
   return (
     <Box className={classes.root}>

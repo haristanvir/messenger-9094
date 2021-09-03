@@ -18,7 +18,7 @@ const Messages = (props) => {
           lastReadMessageId= {conversation.lastReadMessageId} messageId={message.id} otherUser={otherUser}/>
         ) : (
           <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser}
-          conversation={conversation} userId={userId} />
+          conversation={conversation} userId={userId} isMessageRead = {message.read}/>
         );
       })}
     </Box>
