@@ -135,21 +135,14 @@ export const postMessage = (body) => async (dispatch) => {
   }
 };
 
-const updateReadStatus = async (unreadMessages) => {
-     await axios.put(`/api/messages/`, {read: true , unreadMessages});
+const updateReadStatus = async (conversationId) => {
+     await axios.put(`/api/conversations/${conversationId}`, {read: true });
 };
 
 export const updateReadMessages = (conversation, userId) => async (dispatch) => {
-  console.log("this is called");
-  const unreadMessages = conversation.messages.filter(message=>{
-    if (!message.read && message.senderId === conversation.otherUser.id)
-        return message.id;
-  }).map(message=>message.id);
-  if (unreadMessages.length>0){
-    await updateReadStatus(unreadMessages);
+    await updateReadStatus(conversation.id);
     dispatch(markMessagesRead(conversation.id, undefined))
     sendReadUpdate(userId, conversation.id);
-  }
 }
 
 export const searchUsers = (searchTerm) => async (dispatch) => {

@@ -43,22 +43,4 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// The following route only accepts bulk 
-// update of the message resource
-router.put("/", async (req, res, next) => {
-  const { read, unreadMessages } = req.body
-  try{
-    const message = await Message.update(
-      { read: read},
-      { where: {
-        id: unreadMessages
-      }}
-    )
-} catch (error) {
-  next(error);
-}
-res.sendStatus(204);
-});
-
-
 module.exports = router;

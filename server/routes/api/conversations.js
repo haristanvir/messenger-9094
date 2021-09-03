@@ -78,4 +78,22 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// The following route only accepts bulk 
+// update of the message resource
+router.put("/:conversationId", async (req, res, next) => {
+  const { read } = req.body
+  const { conversationId } = req.params
+  try{
+      await Message.update(
+      { read: read},
+      { where: {
+        conversationId: conversationId,
+      }}
+    )
+} catch (error) {
+  next(error);
+}
+res.sendStatus(204);
+});
+
 module.exports = router;
