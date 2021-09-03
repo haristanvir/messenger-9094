@@ -43,9 +43,8 @@ const SenderBubble = (props) => {
       <Box className={classes.bubble}>
         <Typography className={classes.text}>{text}</Typography>
       </Box>
-      {lastReadMessageId === messageId && lastReadMessageId !==undefined ? 
-      <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
-      : undefined}
+      {lastReadMessageId === messageId && lastReadMessageId  &&
+      <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar} />}
     </Box>
   );
 };
