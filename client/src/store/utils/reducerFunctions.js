@@ -78,7 +78,6 @@ export const markMessageReadInStore= (state, conversationId, senderId) => {
           }
         newConvo.unreadMessagesCount = calculateUnreadMessageCount(newConvo);
       });
-      console.log("unread count");
       return newConvo;
     } else {
       return conversation
