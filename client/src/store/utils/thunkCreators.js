@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  markMessagesRead,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -67,13 +68,29 @@ export const logout = (id) => async (dispatch) => {
   }
 };
 
+const findLastReadMessageId = (messages, userId) => {
+  let lastReadMessageId = -1;
+  messages.forEach(message=>{
+    if (message.id > lastReadMessageId && message.read === true && message.senderId === userId)
+      {
+        lastReadMessageId = message.id
+      }
+  })
+  return lastReadMessageId === -1 ? undefined: lastReadMessageId;
+};
+
 // CONVERSATIONS THUNK CREATORS
 
-export const fetchConversations = () => async (dispatch) => {
+export const fetchConversations = (userId) => async (dispatch) => {
   try {
     const { data } = await axios.get("/api/conversations");
     data.forEach(conversation => 
-      {conversation.messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));})
+      {
+        conversation.messages.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+        conversation.lastReadMessageId = findLastReadMessageId (conversation.messages, userId);
+        conversation.unreadMessagesCount = conversation.messages.filter(message => message.read === false 
+          && message.senderId === conversation.otherUser.id).length;
+      });
     dispatch(gotConversations(data));
   } catch (error) {
     console.error(error);
@@ -90,6 +107,13 @@ const sendMessage = (data, body) => {
     message: data.message,
     recipientId: body.recipientId,
     sender: data.sender,
+  });
+};
+
+const sendReadUpdate = (senderId, conversationId) => {
+  socket.emit("message-read", {
+    senderId,
+    conversationId,
   });
 };
 
@@ -110,6 +134,16 @@ export const postMessage = (body) => async (dispatch) => {
     console.error(error);
   }
 };
+
+const updateReadStatus = async (conversationId) => {
+     await axios.put(`/api/conversations/${conversationId}`, {read: true });
+};
+
+export const updateReadMessages = (conversation, userId) => async (dispatch) => {
+    await updateReadStatus(conversation.id);
+    dispatch(markMessagesRead(conversation.id, undefined))
+    sendReadUpdate(userId, conversation.id);
+}
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {
