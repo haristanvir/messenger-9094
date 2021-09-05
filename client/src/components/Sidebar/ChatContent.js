@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { UnreadCounter } from "./index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     color: "#9CADC8",
     letterSpacing: -0.17,
   },
+  unreadCounter: {
+    alignItems: "flex-end",
+    padding: theme.spacing(10),
+  },
 }));
 
 const ChatContent = (props) => {
@@ -25,7 +30,7 @@ const ChatContent = (props) => {
 
   const { conversation } = props;
   const { latestMessageText, otherUser } = conversation;
-
+  const unreadMessagesCount = conversation.unreadMessagesCount;
   return (
     <Box className={classes.root}>
       <Box>
@@ -36,6 +41,9 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
+      {unreadMessagesCount !==0 &&
+          <UnreadCounter counter={unreadMessagesCount} />
+      }
     </Box>
   );
 };

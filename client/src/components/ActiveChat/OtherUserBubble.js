@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from 'react';
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography, Avatar } from "@material-ui/core";
+import { updateReadMessages } from "../../store/utils/thunkCreators";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,7 +35,13 @@ const useStyles = makeStyles(() => ({
 
 const OtherUserBubble = (props) => {
   const classes = useStyles();
-  const { text, time, otherUser } = props;
+  const { text, time, otherUser, conversation, userId, isMessageRead } = props;
+  // This is to update the read status everytime a message is received
+  useEffect(() => {
+    if (!isMessageRead){
+      props.updateReadMessages(conversation, userId);
+    }
+  },[]);
   return (
     <Box className={classes.root}>
       <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
@@ -49,4 +57,13 @@ const OtherUserBubble = (props) => {
   );
 };
 
-export default OtherUserBubble;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateReadMessages: (conversation, userId) => {
+      dispatch(updateReadMessages(conversation, userId));
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(OtherUserBubble);
