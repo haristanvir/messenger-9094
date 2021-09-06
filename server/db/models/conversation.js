@@ -1,8 +1,13 @@
-const { Op } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const db = require("../db");
 const Message = require("./message");
 
-const Conversation = db.define("conversation", {});
+const Conversation = db.define("conversation", {
+  groupName: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+});
 
 // find conversation given two user Ids
 
